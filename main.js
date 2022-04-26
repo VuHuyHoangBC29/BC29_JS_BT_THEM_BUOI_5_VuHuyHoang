@@ -64,3 +64,58 @@ document.getElementById("btnTinhThue").onclick = function () {
 
     getEle("footerBai1").innerHTML = "Họ tên: " + hoTen + "; Tiền thuế thu nhập cá nhân: " + TTNCN + " VNĐ";
 }
+
+/**
+ * Bài 2: Tính tiền cáp
+ * - Đầu vào: chọn loại khách hàng, nhập mã khách hàng, số kết nối, số kênh cao cấp.
+ * - Xử lý: 
+ *      + Nếu khách hàng là Nhà dân, ô nhập số kết nối sẽ bị disabled.
+ *      + Nếu khách hàng là Doanh nghiệp, ô nhập số kết nối sẽ được enabled.
+ *      + Tiền cáp = Phí xử lý hóa đơn + Phí dịch vụ cơ bản + Phí thuê kênh cao cấp.
+ *      + Đối với doanh nghiệp, phí dịch vụ cơ bản là hình thức trọn gói $75 cho 10 kênh, nếu dưới 10 kênh vẫn là $75.
+ * - Đầu ra: show kết quả.
+ */
+const PXLHD_DAN = 4.5;
+const PDVCB_DAN = 20.5;
+const PTKCC_DAN = 7.5;
+const PXLHD_DN = 15;
+const PTKCC_DN = 50;
+const phiDichVuCoBanBasic = 75;
+const phiDichVuCoBanExtra = 5;
+
+function tinhPhiDichVuCoBan(soKetNoi, phiDichVuCoBanBasic, phiDichVuCoBanExtra) {
+    var result = 0;
+    if (soKetNoi <= 10) {
+        result = phiDichVuCoBanBasic;
+    } else if (soKetNoi > 10) {
+        result = phiDichVuCoBanBasic + (soKetNoi - 10) * phiDichVuCoBanExtra;
+    }
+    return result;
+}
+
+getEle("loaiKhach").onchange = function () {
+    var loaiKhachActive = getEle("loaiKhach").value;
+    if (loaiKhachActive === "nhaDan") {
+        getEle("soKetNoi").disabled = true;
+    } else {
+        getEle("soKetNoi").disabled = false;
+    }
+}
+
+getEle("btnPhiCap").onclick = function () {
+    var maKhach = getEle("maKhach").value;
+    var soKetNoi = getEle("soKetNoi").value * 1;
+    var soKenhCaoCap = getEle("soKenhCaoCap").value * 1;
+    var loaiKhach = getEle("loaiKhach").value;
+    var tongPhiCap = 0;
+    var phiDichVuCoBanDN = tinhPhiDichVuCoBan(soKetNoi, phiDichVuCoBanBasic, phiDichVuCoBanExtra);
+
+    if (loaiKhach === "nhaDan") {
+        tongPhiCap = PXLHD_DAN + PDVCB_DAN + PTKCC_DAN * soKenhCaoCap;
+    } else if (loaiKhach === "doanhNghiep") {
+        tongPhiCap = PXLHD_DN + phiDichVuCoBanDN + PTKCC_DN * soKenhCaoCap;
+    }
+    var currentFormat = new Intl.NumberFormat("en-US");
+    tongPhiCap = currentFormat.format(tongPhiCap);
+    getEle("footerBai2").innerHTML = "Mã khách hàng: " + maKhach + "; Tiền cáp: $" + tongPhiCap;
+}
