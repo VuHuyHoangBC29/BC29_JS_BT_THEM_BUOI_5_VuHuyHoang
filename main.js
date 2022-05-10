@@ -115,7 +115,7 @@ getEle("btnPhiCap").onclick = function () {
     } else if (loaiKhach === "doanhNghiep") {
         tongPhiCap = PXLHD_DN + phiDichVuCoBanDN + PTKCC_DN * soKenhCaoCap;
     }
-    var currentFormat = new Intl.NumberFormat("en-US");
-    tongPhiCap = currentFormat.format(tongPhiCap);
+    var currentFormat2 = new Intl.NumberFormat("en-US");
+    tongPhiCap = currentFormat2.format(tongPhiCap);
     getEle("footerBai2").innerHTML = "Mã khách hàng: " + maKhach + "; Tiền cáp: $" + tongPhiCap;
 }
